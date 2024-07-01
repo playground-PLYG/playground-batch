@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.playground.batch.api.test.mapper.TestMapper">
+    <select id="selectAll" resultType="com.playground.batch.api.test.model.TestDto">
+        SELECT * FROM tb_code
+    </select>
+
+    <select id="selectByCodeId" resultType="com.playground.batch.api.test.model.TestDto" parameterType="string">
+        SELECT * FROM tb_code
+        WHERE code_sn = ${codeSn}
+    </select>
+</mapper>

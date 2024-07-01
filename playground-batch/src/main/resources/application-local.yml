@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:log4jdbc:postgresql://${sm://db-host}:5432/playground
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    username: batch_user
+    password: ${sm://db-pwd}
+  ai:
+    openai:
+      api-key: ${sm://openai-key}
+      embedding:
+        options:
+          model: text-embedding-3-small
+  batch:
+    job:
+      name: ${job.name:NONE}
+
+logging:
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%t]){faint} %clr(%logger){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}" #console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr([${LOG_LEVEL_PATTERN:%5p}]) %clr([%10.10X{userId}]){magenta} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  level:
+    root: info
+    com:
+      playground: debug
+    org:
+      springframework:
+        messaging: debug
+        core:
+          LocalVariableTableParameterNameDiscoverer: error
+        batch: debug
+    jdbc:
+      audit: warn
+      connection: warn
+      resultset: warn
+      sqltiming: warn
+      sqlonly: debug
+      resultsettable: debug
+
+CRYPTO_PWD: ${sm://crypto-pwd}
+CRYPTO_SALT: ${sm://crypto-pwd}
+
+CLIENT_URL: http://localhost:3000
