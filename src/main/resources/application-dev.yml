@@ -1,15 +1,18 @@
 spring:
- datasource:
-  driver-class-name: org.postgresql.Driver
-  url: jdbc:postgresql://${sm://db-host}:5432/playground
-  username: batch_user
-  password: ${sm://db-pwd}
- ai:
-  openai:
-   api-key: ${sm://openai-key}
-   embedding:
-    options:
-     model: text-embedding-3-small
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${sm://db-host}:5432/playground
+    username: batch_user
+    password: ${sm://db-pwd}
+  ai:
+    openai:
+      api-key: ${sm://openai-key}
+      embedding:
+        options:
+          model: text-embedding-3-small
+  batch:
+    job:
+      name: ${job.name:NONE}
   
 mybatis:
  mapper-locations: classpath:mapper/*.xml
