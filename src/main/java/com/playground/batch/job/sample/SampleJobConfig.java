@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @EnableBatchProcessing
 @RequiredArgsConstructor
 public class SampleJobConfig {
-  
   @Bean
   Job sampleJob1(JobRepository jobRepository, Step sampleStep1, Step sampleStep2, Step sampleStep3) {
     log.debug(">>> sampleJob1");
