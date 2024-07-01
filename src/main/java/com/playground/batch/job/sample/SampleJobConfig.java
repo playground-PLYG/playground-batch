@@ -51,8 +51,6 @@ public class SampleJobConfig {
     }), platformTransactionManager).build();
   }
 
-
-
 }
 
 
