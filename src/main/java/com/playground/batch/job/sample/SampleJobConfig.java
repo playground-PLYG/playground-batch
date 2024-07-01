@@ -50,7 +50,6 @@ public class SampleJobConfig {
       return RepeatStatus.FINISHED;
     }), platformTransactionManager).build();
   }
-
 }
 
 
