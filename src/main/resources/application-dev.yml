@@ -15,9 +15,6 @@ spring:
       embedding:
         options:
           model: text-embedding-3-small
-  batch:
-    job:
-      name: ${job.name:NONE}
   
 logging:
   pattern:
