@@ -11,7 +11,7 @@ import com.playground.batch.api.message.component.DiscordComponent;
 public class RestClientConfig {
 
   @Bean
-  public DiscordComponent discordWebhook() {
+  DiscordComponent discordWebhook() {
     RestClient restClient = RestClient.builder().baseUrl("https://discord.com/api").build();
     RestClientAdapter adapter = RestClientAdapter.create(restClient);
     HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
