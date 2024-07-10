@@ -4,6 +4,11 @@ spring:
     url: jdbc:postgresql://${sm://db-host}:5432/playground
     username: batch_user
     password: ${sm://db-pwd}
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
+      username: batch_user
+      password: ${sm://db-pwd}
   ai:
     openai:
       api-key: ${sm://openai-key}
@@ -12,11 +17,9 @@ spring:
           model: text-embedding-3-small
   batch:
     job:
+      enabled: false
       name: ${job.name:NONE}
   
-mybatis:
- mapper-locations: classpath:mapper/*.xml
-
 logging:
   pattern:
     console: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} [${LOG_LEVEL_PATTERN:%5p}] [%10.10X{userId}] [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
