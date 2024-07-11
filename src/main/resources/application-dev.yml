@@ -1,7 +1,7 @@
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${sm://db-host}:5432/playground
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:postgresql://${sm://db-host}:5432/playground
     username: batch_user
     password: ${sm://db-pwd}
   ai:
@@ -13,13 +13,20 @@ spring:
   
 logging:
   pattern:
-    console: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} [${LOG_LEVEL_PATTERN:%5p}] [%10.10X{userId}] [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    console: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} [${LOG_LEVEL_PATTERN:%5p}] [%t] %logger : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
   level:
     root: info
     org:
       springframework: info
     com:
-     playground: debug
+      playground: debug
+    jdbc:
+      audit: warn
+      connection: warn
+      resultset: warn
+      sqltiming: warn
+      sqlonly: debug
+      resultsettable: debug
       
 CRYPTO_PWD: ${sm://crypto-pwd}
 CRYPTO_SALT: ${sm://crypto-pwd}
