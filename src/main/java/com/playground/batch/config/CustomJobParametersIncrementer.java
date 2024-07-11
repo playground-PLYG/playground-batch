@@ -14,7 +14,7 @@ public class CustomJobParametersIncrementer implements JobParametersIncrementer 
   @Override
   public JobParameters getNext(JobParameters jobParameters) {
     log.debug(">>> jobParameters : {}", jobParameters);
-    log.debug(">>> jobParameters : {}", jobParameters.getParameter("run.id") + "_" + format.format(new Date())));
+    log.debug(">>> jobParameters : {}", jobParameters.getParameter("run.id") + "_" + format.format(new Date()));
     return new JobParametersBuilder().addString("run.id", jobParameters.getParameter("run.id") + "_" + format.format(new Date())).toJobParameters();
   }
 }
