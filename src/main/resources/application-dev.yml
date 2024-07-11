@@ -4,11 +4,6 @@ spring:
     url: jdbc:postgresql://${sm://db-host}:5432/playground
     username: batch_user
     password: ${sm://db-pwd}
-    hikari:
-      driver-class-name: org.postgresql.Driver
-      jdbc-url: jdbc:postgresql://${sm://db-host}:5432/playground
-      username: batch_user
-      password: ${sm://db-pwd}
   ai:
     openai:
       api-key: ${sm://openai-key}
