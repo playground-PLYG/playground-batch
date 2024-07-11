@@ -13,32 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TestDto {
-  private Integer codeSn;
+  private Integer smpleSn;
 
-  /**
-   * 코드id
-   */
-  private String codeId;
+  private String smpleFirstCn;
 
-  /**
-   * 코드명
-   */
-  private String codeNm;
+  private String smpleSeconCn;
 
-  /**
-   * 상위코드id
-   */
-  private String upperCodeId;
-
-  /**
-   * 그룹코드여부
-   */
-  private String groupCodeAt;
-
-  /**
-   * 정렬 순번
-   */
-  private Integer sortOrdr;
+  private String smpleThrdCn;
 
   private String registUsrId;
 

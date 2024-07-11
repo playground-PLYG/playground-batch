@@ -24,6 +24,9 @@ logging:
         core:
           LocalVariableTableParameterNameDiscoverer: error
         batch: debug
+        jdbc:
+          core:
+            JDBCTemplate: warn
     jdbc:
       audit: warn
       connection: warn

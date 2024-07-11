@@ -1,5 +1,10 @@
 package com.playground.batch.job.sample;
 
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.batch.MyBatisBatchItemWriter;
+import org.mybatis.spring.batch.MyBatisCursorItemReader;
+import org.mybatis.spring.batch.builder.MyBatisBatchItemWriterBuilder;
+import org.mybatis.spring.batch.builder.MyBatisCursorItemReaderBuilder;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -11,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+import com.playground.batch.api.test.model.TestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,14 +52,20 @@ public class SampleJobConfig {
   }
 
   @Bean
-  Step sampleStep3(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
+  Step sampleStep3(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager, SqlSessionFactory sqlSessionFactory) {
     log.debug(">>> sampleStep3");
-    return new StepBuilder("sampleStep3", jobRepository).tasklet(((contribution, chunkContext) -> {
-      log.debug(">>>>> sampleStep3 - Tasklet");
-      return RepeatStatus.FINISHED;
-    }), platformTransactionManager).build();
+    return new StepBuilder("sampleStep3", jobRepository).<TestDto, TestDto>chunk(10000, platformTransactionManager).reader(reader(sqlSessionFactory))
+        .writer(writer(sqlSessionFactory)).build();
   }
-  /*
-   * @Bean MyBatisCursorItemReader<TestDto> reader(SqlSessionFactory sqlSessionFactory) { return new MyBatisCursorItemReaderBuilder<TestDto>().sqlSessionFactory(sqlSessionFactory) .queryId("com.playground.batch.api.test.mapper.TestMapper.selectAll").build(); }
-   */
+
+  @Bean
+  MyBatisCursorItemReader<TestDto> reader(SqlSessionFactory sqlSessionFactory) {
+    return new MyBatisCursorItemReaderBuilder<TestDto>().sqlSessionFactory(sqlSessionFactory).queryId("TestMapper.selectOne").build();
+  }
+
+  @Bean
+  MyBatisBatchItemWriter<TestDto> writer(SqlSessionFactory sqlSessionFactory) {
+    return new MyBatisBatchItemWriterBuilder<TestDto>().sqlSessionFactory(sqlSessionFactory).statementId("TestMapper.insert").build();
+  }
+
 }
