@@ -1,8 +1,5 @@
 package com.playground.batch.job.sample;
 
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.batch.MyBatisCursorItemReader;
-import org.mybatis.spring.batch.builder.MyBatisCursorItemReaderBuilder;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -15,7 +12,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
-import com.playground.batch.api.test.model.TestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,10 +53,7 @@ public class SampleJobConfig {
       return RepeatStatus.FINISHED;
     }), platformTransactionManager).build();
   }
-
-  @Bean
-  MyBatisCursorItemReader<TestDto> reader(SqlSessionFactory sqlSessionFactory) {
-    return new MyBatisCursorItemReaderBuilder<TestDto>().sqlSessionFactory(sqlSessionFactory)
-        .queryId("com.playground.batch.api.test.mapper.TestMapper.selectAll").build();
-  }
+  /*
+   * @Bean MyBatisCursorItemReader<TestDto> reader(SqlSessionFactory sqlSessionFactory) { return new MyBatisCursorItemReaderBuilder<TestDto>().sqlSessionFactory(sqlSessionFactory) .queryId("com.playground.batch.api.test.mapper.TestMapper.selectAll").build(); }
+   */
 }
