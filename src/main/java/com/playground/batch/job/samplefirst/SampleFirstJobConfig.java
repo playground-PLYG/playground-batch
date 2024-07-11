@@ -3,7 +3,6 @@ package com.playground.batch.job.samplefirst;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -11,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+import com.playground.batch.config.CustomJobParametersIncrementer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,8 @@ public class SampleFirstJobConfig {
   @Bean(name = JOB_NAME)
   Job sampleFirstJob(JobRepository jobRepository, Step sampleStep1, Step sampleStep2, Step sampleStep3) {
     log.debug(">>> sampleFirstJob1");
-    return new JobBuilder(JOB_NAME, jobRepository).incrementer(new RunIdIncrementer()).start(sampleStep1).next(sampleStep2).next(sampleStep3).build();
+    return new JobBuilder(JOB_NAME, jobRepository).incrementer(new CustomJobParametersIncrementer()).start(sampleStep1).next(sampleStep2)
+        .next(sampleStep3).build();
   }
 
   @Bean
