@@ -1,18 +1,13 @@
 package com.playground.batch.config;
 
-import java.util.Collection;
+import java.util.Map;
 import javax.sql.DataSource;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.boot.autoconfigure.batch.BatchDataSource;
 import org.springframework.boot.autoconfigure.batch.BatchDataSourceScriptDatabaseInitializer;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
@@ -21,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -33,10 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @EnableConfigurationProperties(BatchProperties.class)
 public class BatchConfig {
-  @Value("${spring.datasource.driver-class-name}")
+  @Value("${spring.datasource.hikari.driver-class-name}")
   private String dbDriverClassName;
 
-  @Value("${spring.datasource.username}")
+  @Value("${spring.datasource.hikari.username}")
   private String dbUser;
 
   @Value("${sm://db-pwd}")
@@ -47,28 +43,27 @@ public class BatchConfig {
 
   @Value("${spring.profiles.active}")
   private String activeProfile;
-
-  @Bean
-  static BeanDefinitionRegistryPostProcessor jobRegistryBeanPostProcessorRemover() {
-    return registry -> registry.removeBeanDefinition("jobRegistryBeanPostProcessor");
-  }
-
-  @Bean
-  BeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) throws Exception {
-    JobRegistryBeanPostProcessor postProcessor = new JobRegistryBeanPostProcessor();
-    postProcessor.setJobRegistry(jobRegistry);
-    return postProcessor;
-  }
+  /*
+   * @Bean static BeanDefinitionRegistryPostProcessor jobRegistryBeanPostProcessorRemover() { return registry -> registry.removeBeanDefinition("jobRegistryBeanPostProcessor"); }
+   *
+   * @Bean BeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) { JobRegistryBeanPostProcessor postProcessor = new JobRegistryBeanPostProcessor(); postProcessor.setJobRegistry(jobRegistry); return postProcessor; }
+   */
 
   // batchDatasource 사용을 위한 수동 빈 등록
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = "spring.batch.job", name = "enabled", havingValue = "true", matchIfMissing = true)
   JobLauncherApplicationRunner jobLauncherApplicationRunner(JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository,
-      BatchProperties properties, Collection<Job> jobs) {
+      BatchProperties properties, ApplicationContext context) {
     JobLauncherApplicationRunner runner = new JobLauncherApplicationRunner(jobLauncher, jobExplorer, jobRepository);
     String jobNames = properties.getJob().getName();
-    log.debug("{}", jobs);
+
+    Map<String, Object> beans = context.getBeansOfType(Object.class);
+
+    for (String beanName : beans.keySet()) {
+      log.debug(beanName);
+    }
+
     if (StringUtils.hasText(jobNames)) {
       runner.setJobName(jobNames);
     }
@@ -103,4 +98,5 @@ public class BatchConfig {
   PlatformTransactionManager batchTransactionManager(@Qualifier("batchDataSource") DataSource batchDataSource) {
     return new DataSourceTransactionManager(batchDataSource);
   }
+
 }

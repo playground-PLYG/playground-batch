@@ -2,13 +2,12 @@ package com.playground.batch.job.sample;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -18,11 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "job.name", havingValue = "sampleJob")
 public class SampleJobConfig {
-  public static final String JOB_NAME = "sampleJob1";
+  public static final String JOB_NAME = "sampleJob";
 
   @Bean(name = JOB_NAME)
-  Job sampleJob1(JobRepository jobRepository, Step sampleStep1, Step sampleStep2, Step sampleStep3) {
+  Job sampleJob(JobRepository jobRepository, Step sampleStep1, Step sampleStep2, Step sampleStep3) {
     log.info(">>> sampleJob1");
     return new JobBuilder(JOB_NAME, jobRepository).incrementer(new RunIdIncrementer()).start(sampleStep1).next(sampleStep2).next(sampleStep3).build();
   }
@@ -30,7 +30,7 @@ public class SampleJobConfig {
   @Bean
   Step sampleStep1(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
     log.debug(">>> sampleStep1");
-    return new StepBuilder("sampleStep1", jobRepository).tasklet(((StepContribution contribution, ChunkContext chunkContext) -> {
+    return new StepBuilder("sampleStep1", jobRepository).tasklet(((contribution, chunkContext) -> {
       log.debug(">>>>> sampleStep1 - Tasklet");
       return RepeatStatus.FINISHED;
     }), platformTransactionManager).build();
