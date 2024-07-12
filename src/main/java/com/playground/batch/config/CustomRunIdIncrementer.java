@@ -26,8 +26,18 @@ public class CustomRunIdIncrementer extends RunIdIncrementer {
     JobParameter<?> profileParameter = params.getParameter(CustomRunIdIncrementer.RUN_PROFILE_KEY);
     String profile = "local";
 
-    if (profileParameter != null && profileParameter.getValue() instanceof String profileParam && StringUtils.isNotBlank(profileParam)) {
-      profile = profileParam;
+    log.debug(">>> profile-1 : {}", profile);
+    if (profileParameter != null) {
+      log.debug(">>> profile-2 : {}", profile);
+      if (profileParameter.getValue() instanceof String profileParam) {
+        log.debug(">>> profile-3 : {}", profile);
+        log.debug(">>> profileParam : {}", profileParam);
+        log.debug(">>> StringUtils.isNotBlank(profileParam) : {}", StringUtils.isNotBlank(profileParam));
+        if (StringUtils.isNotBlank(profileParam)) {
+          log.debug(">>> profile-4 : {}", profile);
+          profile = profileParam;
+        }
+      }
     }
 
     LocalDateTime now = LocalDateTime.now();
