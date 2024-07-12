@@ -23,10 +23,11 @@ public class CustomRunIdIncrementer extends RunIdIncrementer {
   public JobParameters getNext(@Nullable JobParameters parameters) {
     JobParameters params = (parameters == null) ? new JobParameters() : parameters;
 
-    String profile = System.getProperty("spring.profiles.active");
+    JobParameter<?> profileParameter = params.getParameter(CustomRunIdIncrementer.RUN_PROFILE_KEY);
+    String profile = "local";
 
-    if (StringUtils.isBlank(profile)) {
-      profile = "local";
+    if (profileParameter != null && profileParameter.getValue() instanceof String profileParam && StringUtils.isNotBlank(profileParam)) {
+      profile = profileParam;
     }
 
     LocalDateTime now = LocalDateTime.now();
