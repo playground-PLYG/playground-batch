@@ -1,7 +1,7 @@
 package com.playground.batch.config;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
@@ -17,7 +17,7 @@ public class CustomRunIdIncrementer extends RunIdIncrementer {
   private static final String RUN_PROFILE_KEY = "run.profile";
   private static final String RUN_DATE_KEY = "run.date";
 
-  private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss.SSS");
+  private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd_hh:mm:ss.SSS");
 
   @Override
   public JobParameters getNext(@Nullable JobParameters parameters) {
@@ -29,18 +29,18 @@ public class CustomRunIdIncrementer extends RunIdIncrementer {
       profile = "local";
     }
 
-    Date now = new Date();
-    String runDate = dateFormat.format(now);
+    LocalDateTime now = LocalDateTime.now();
+    String runDate = now.format(dateTimeFormat);
 
-    JobParameter<?> buildIdParameter = params.getParameters().get(CustomRunIdIncrementer.RUN_BUILD_ID_KEY);
+    JobParameter<?> buildIdParameter = params.getParameter(CustomRunIdIncrementer.RUN_BUILD_ID_KEY);
 
-    String buildId = "";
+    Long buildId = -1L;
     String runId = profile;
 
-    if (buildIdParameter != null) {
-      buildId = String.valueOf(buildIdParameter.getValue());
+    if (buildIdParameter != null && buildIdParameter.getValue() instanceof Long buildIdParam) {
+      buildId = buildIdParam;
 
-      if (StringUtils.isNotBlank(buildId)) {
+      if (buildIdParam > 0) {
         runId += "_" + buildId;
       }
     }
@@ -48,7 +48,7 @@ public class CustomRunIdIncrementer extends RunIdIncrementer {
     runId += "_" + runDate;
 
     return new JobParametersBuilder(params).addString(CustomRunIdIncrementer.RUN_ID_KEY, runId)
-        .addString(CustomRunIdIncrementer.RUN_BUILD_ID_KEY, buildId, false).addString(CustomRunIdIncrementer.RUN_PROFILE_KEY, profile, false)
-        .addDate(CustomRunIdIncrementer.RUN_DATE_KEY, now).toJobParameters();
+        .addLong(CustomRunIdIncrementer.RUN_BUILD_ID_KEY, buildId).addString(CustomRunIdIncrementer.RUN_PROFILE_KEY, profile)
+        .addLocalDateTime(CustomRunIdIncrementer.RUN_DATE_KEY, now).toJobParameters();
   }
 }
