@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 import com.playground.batch.api.test.model.TestDto;
-import com.playground.batch.config.CustomJobParametersIncrementer;
+import com.playground.batch.config.CustomRunIdIncrementer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ public class SampleJobConfig {
   @Bean(name = JOB_NAME)
   Job sampleJob(JobRepository jobRepository, Step sampleStep1, Step sampleStep2, Step sampleStep3) {
     log.info(">>> sampleJob1");
-    return new JobBuilder(JOB_NAME, jobRepository).incrementer(new CustomJobParametersIncrementer()).start(sampleStep1).next(sampleStep2)
+    return new JobBuilder(JOB_NAME, jobRepository).incrementer(new CustomRunIdIncrementer()).start(sampleStep1).next(sampleStep2)
         .next(sampleStep3).build();
   }
 
