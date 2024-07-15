@@ -67,7 +67,6 @@ public class BucketFileClearJobConfig {
         if (!deleteFileList.isEmpty()) {
           storage.delete(deleteFileList);
         }
-
       }
 
       return RepeatStatus.FINISHED;
