@@ -21,4 +21,14 @@
 		FROM
 			TB_FILE
     </select>
+
+    <delete id="deleteInFileSn" parameterType="java.util.List">
+        DELETE FROM
+			TB_FILE
+		WHERE
+			FILE_SN IN
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+		        #{item}
+		    </foreach>
+    </delete>
 </mapper>

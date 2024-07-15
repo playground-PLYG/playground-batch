@@ -7,4 +7,6 @@ import com.playground.batch.job.file.model.TbFileDto;
 @Mapper
 public interface FileDao {
   List<TbFileDto> selectAll();
+
+  int deleteInFileSn(List<Integer> fileSnList);
 }
