@@ -1,11 +1,11 @@
-package com.playground.batch.api.message.component;
+package com.playground.batch.comm.message.component;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
-import com.playground.batch.api.message.model.DiscordRequest;
+import com.playground.batch.comm.message.model.DiscordRequest;
 
 @Component
 @HttpExchange

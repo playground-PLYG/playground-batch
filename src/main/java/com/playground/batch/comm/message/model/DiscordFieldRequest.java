@@ -1,8 +1,7 @@
-package com.playground.batch.api.message.model;
+package com.playground.batch.comm.message.model;
 
 import java.io.Serial;
 import java.io.Serializable;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,16 +13,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DiscordAuthorRequest implements Serializable {
+public class DiscordFieldRequest implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
 
   private String name;
 
-  private String url; // http(s)로 시작하는 경로 필수
+  private String value;
 
-  @JsonProperty("icon_url")
-  private String iconUrl; // http(s)로 시작하는 경로 필수
-
+  private boolean inline;
 }

@@ -1,4 +1,4 @@
-package com.playground.batch.api.message.model;
+package com.playground.batch.comm.message.model;
 
 import java.io.Serial;
 import java.io.Serializable;

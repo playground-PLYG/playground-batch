@@ -1,4 +1,4 @@
-package com.playground.batch.api.message.model;
+package com.playground.batch.comm.message.model;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,14 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DiscordImageRequest implements Serializable {
-
-  /*
-   * https://discord.com/developers/docs/resources/webhook 참고 데이터 세팅중 하나라도 잘못되어 있으면 전송 안됨 ex) Author에 url이 http(s)로 시작안하는 경우
-   */
+public class DiscordThumbnailRequest implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
   
   private String url;
+
 }

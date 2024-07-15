@@ -1,4 +1,4 @@
-package com.playground.batch.api.test.model;
+package com.playground.batch.job.sample.model;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

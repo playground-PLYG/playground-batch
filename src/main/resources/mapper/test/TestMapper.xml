@@ -3,20 +3,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="TestMapper">
-    <select id="selectAll" resultType="com.playground.batch.api.test.model.TestDto">
+    <select id="selectAll" resultType="com.playground.batch.job.sample.model.TestDto">
         SELECT * FROM tb_smple
     </select>
 
-     <select id="selectOne" resultType="com.playground.batch.api.test.model.TestDto">
+     <select id="selectOne" resultType="com.playground.batch.job.sample.model.TestDto">
         SELECT * FROM tb_smple limit 1
     </select>
 
-    <select id="selectByCodeId" resultType="com.playground.batch.api.test.model.TestDto" parameterType="string">
+    <select id="selectByCodeId" resultType="com.playground.batch.job.sample.model.TestDto" parameterType="string">
         SELECT * FROM tb_code
         WHERE code_sn = ${codeSn}
     </select>
 
-    <insert id="insert" parameterType="com.playground.batch.api.test.model.TestDto">
+    <insert id="insert" parameterType="com.playground.batch.job.sample.model.TestDto">
         INSERT INTO tb_smple
 			(
 				smple_first_cn,
