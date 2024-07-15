@@ -1,8 +1,5 @@
 package com.playground.batch.config;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -13,53 +10,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomRunIdIncrementer extends RunIdIncrementer {
   private static final String RUN_ID_KEY = "run.id";
-  private static final String RUN_BUILD_ID_KEY = "run.build_id";
-  private static final String RUN_PROFILE_KEY = "run.profile";
-  private static final String RUN_DATE_KEY = "run.date";
-
-  private final DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd_hh:mm:ss.SSS");
 
   @Override
   public JobParameters getNext(@Nullable JobParameters parameters) {
     JobParameters params = (parameters == null) ? new JobParameters() : parameters;
-
-    JobParameter<?> profileParameter = params.getParameter(CustomRunIdIncrementer.RUN_PROFILE_KEY);
-    String profile = "local";
-
-    log.debug(">>> profile-1 : {}", profile);
-    if (profileParameter != null) {
-      log.debug(">>> profile-2 : {}", profile);
-      if (profileParameter.getValue() instanceof String profileParam) {
-        log.debug(">>> profile-3 : {}", profile);
-        log.debug(">>> profileParam : {}", profileParam);
-        log.debug(">>> StringUtils.isNotBlank(profileParam) : {}", StringUtils.isNotBlank(profileParam));
-        if (StringUtils.isNotBlank(profileParam)) {
-          log.debug(">>> profile-4 : {}", profile);
-          profile = profileParam;
-        }
+    JobParameter<?> runIdParameter = params.getParameters().get(CustomRunIdIncrementer.RUN_ID_KEY);
+    long id = 1;
+    if (runIdParameter != null) {
+      try {
+        id = Long.parseLong(runIdParameter.getValue().toString()) + 1;
+      } catch (NumberFormatException exception) {
+        throw new IllegalArgumentException("Invalid value for parameter " + CustomRunIdIncrementer.RUN_ID_KEY, exception);
       }
     }
-
-    LocalDateTime now = LocalDateTime.now();
-    String runDate = now.format(dateTimeFormat);
-
-    JobParameter<?> buildIdParameter = params.getParameter(CustomRunIdIncrementer.RUN_BUILD_ID_KEY);
-
-    Long buildId = -1L;
-    String runId = profile;
-
-    if (buildIdParameter != null && buildIdParameter.getValue() instanceof Long buildIdParam) {
-      buildId = buildIdParam;
-
-      if (buildIdParam > 0) {
-        runId += "_" + buildId;
-      }
-    }
-
-    runId += "_" + runDate;
-
-    return new JobParametersBuilder(params).addString(CustomRunIdIncrementer.RUN_ID_KEY, runId)
-        .addLong(CustomRunIdIncrementer.RUN_BUILD_ID_KEY, buildId).addString(CustomRunIdIncrementer.RUN_PROFILE_KEY, profile)
-        .addLocalDateTime(CustomRunIdIncrementer.RUN_DATE_KEY, now).toJobParameters();
+    return new JobParametersBuilder(params).addLong(CustomRunIdIncrementer.RUN_ID_KEY, id).toJobParameters();
   }
 }
