@@ -29,9 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "job.name", havingValue = "fileBucketClear")
-public class FileBucketClearJobConfig {
-  public static final String JOB_NAME = "fileBucketClear";
+@ConditionalOnProperty(name = "job.name", havingValue = "bucketFileClear")
+public class BucketFileClearJobConfig {
+  public static final String JOB_NAME = "bucketFileClear";
 
   private final FileDao fileDao;
   private final Storage storage;
@@ -40,13 +40,13 @@ public class FileBucketClearJobConfig {
   private String bucketName;
 
   @Bean(name = JOB_NAME)
-  Job fileBucketClear(JobRepository jobRepository, Step fileBucketClearStep1) {
-    return new JobBuilder(JOB_NAME, jobRepository).incrementer(new CustomRunIdIncrementer()).start(fileBucketClearStep1).build();
+  Job bucketFileClear(JobRepository jobRepository, Step bucketFileClearStep1) {
+    return new JobBuilder(JOB_NAME, jobRepository).incrementer(new CustomRunIdIncrementer()).start(bucketFileClearStep1).build();
   }
 
   @Bean
-  Step fileBucketClearStep1(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
-    return new StepBuilder("fileBucketClearStep1", jobRepository).tasklet(((contribution, chunkContext) -> {
+  Step bucketFileClearStep1(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
+    return new StepBuilder("bucketFileClearStep1", jobRepository).tasklet(((contribution, chunkContext) -> {
       Page<Blob> blobs = storage.list(bucketName);
       Iterator<Blob> blobIterator = blobs.iterateAll().iterator();
 
