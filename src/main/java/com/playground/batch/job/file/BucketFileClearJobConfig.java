@@ -65,7 +65,9 @@ public class BucketFileClearJobConfig {
         }
 
         if (!deleteFileList.isEmpty()) {
-          storage.delete(deleteFileList);
+          List<Boolean> resultList = storage.delete(deleteFileList);
+
+          log.debug(">>> resultList : {}", resultList);
         }
       }
 

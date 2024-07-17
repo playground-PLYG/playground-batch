@@ -65,7 +65,9 @@ public class DbFileClearJobConfig {
               fileList.stream().filter(fileDto -> fileMap.get(fileDto.getStreFileNm()) == null).map(TbFileDto::getFileSn).toList();
 
           if (!CollectionUtils.isEmpty(deleteFileList)) {
-            fileDao.deleteInFileSn(deleteFileList);
+            int resultCnt = fileDao.deleteInFileSn(deleteFileList);
+
+            log.debug(">>> resultCnt : {}", resultCnt);
           }
         }
       }
