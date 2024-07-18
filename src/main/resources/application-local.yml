@@ -1,4 +1,9 @@
 spring:
+  data:
+    redis:
+      port: 16379
+      host: ${sm://db-host}
+      password: ${sm://db-pwd}
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     url: jdbc:log4jdbc:postgresql://${sm://db-host}:5432/playground
